@@ -38,3 +38,7 @@ fun App() {
 fun CalcView(){
 
 }
+@Composable
+fun CalcRow(){
+
+}
