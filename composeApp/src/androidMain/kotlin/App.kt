@@ -42,3 +42,7 @@ fun CalcView(){
 fun CalcRow(){
 
 }
+@Composable
+fun CalcDisplay(){
+
+}
