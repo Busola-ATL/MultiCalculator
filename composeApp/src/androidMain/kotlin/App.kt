@@ -1,6 +1,9 @@
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,7 +33,10 @@ fun App() {
             }
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
                     Text("Compose: $greeting")
                 }
@@ -39,61 +45,89 @@ fun App() {
     }
 }
 
-@Composable
-fun CalcView(){
+    @Composable
+    fun CalcView() {
 
-}
+    }
 
-@Composable
-fun CalcRow(){
-
-}
-@Composable
-fun CalcDisplay(display: String, modifier: Modifier = Modifier){
-    Text(
-        text = display,
-        modifier = modifier
-            .height(50.dp)
-            .padding(5.dp)
-            .fillMaxWidth(),
-        textAlign = TextAlign.End,
-        style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold)
-    )
-}
-@Composable
-fun CalcNumericButton(number: Int, display: MutableState<String>, modifier: Modifier = Modifier){
-    Button(
-        onClick = {
-            // Append the number to the display value
-            if (display.value == "0") {
-                display.value = number.toString()
-            } else {
-                display.value += number.toString()
+    @Composable
+    fun CalcRow(
+        display: MutableState<String>,
+        startNum: Int,
+        numButtons: Int,
+        content: @Composable RowScope.() -> Unit
+    ) {
+        val endNum = startNum + numButtons
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            for (num in startNum until endNum) {
+                CalcNumericButton(number = num, display = display, modifier = Modifier.weight(1f))
             }
-        },
-        modifier = modifier
-            .padding(4.dp)
-    ) {
-        Text(text = number.toString())
+            content()
+        }
     }
-}
-@Composable
-fun CalcOperationButton(operation: String, display: MutableState<String>, modifier: Modifier = Modifier){
-    Button(
-        onClick = { "" },
-        modifier = modifier
-            .padding(4.dp)
-    ) {
-        Text(text = operation)
+
+    @Composable
+    fun CalcDisplay(display: String, modifier: Modifier = Modifier) {
+        Text(
+            text = display,
+            modifier = modifier
+                .height(50.dp)
+                .padding(5.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.End,
+            style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold)
+        )
     }
-}
-@Composable
-fun CalcEqualsButton(display: MutableState<String>){
-    Button(
-        onClick = { display.value = "0" },
-        modifier = Modifier
-            .padding(4.dp)
+
+    @Composable
+    fun CalcNumericButton(
+        number: Int,
+        display: MutableState<String>,
+        modifier: Modifier = Modifier
     ) {
-        Text(text = "=")
+        Button(
+            onClick = {
+                // Append the number to the display value
+                if (display.value == "0") {
+                    display.value = number.toString()
+                } else {
+                    display.value += number.toString()
+                }
+            },
+            modifier = modifier
+                .padding(4.dp)
+        ) {
+            Text(text = number.toString())
+        }
     }
-}
+
+    @Composable
+    fun CalcOperationButton(
+        operation: String,
+        display: MutableState<String>,
+        modifier: Modifier = Modifier
+    ) {
+        Button(
+            onClick = { "" },
+            modifier = modifier
+                .padding(4.dp)
+        ) {
+            Text(text = operation)
+        }
+    }
+
+    @Composable
+    fun CalcEqualsButton(display: MutableState<String>) {
+        Button(
+            onClick = { display.value = "0" },
+            modifier = Modifier
+                .padding(4.dp)
+        ) {
+            Text(text = "=")
+        }
+    }
