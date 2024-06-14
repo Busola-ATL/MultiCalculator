@@ -33,3 +33,8 @@ fun App() {
         }
     }
 }
+
+@Composable
+fun CalcView(){
+
+}
